@@ -21,9 +21,17 @@ let totalHits = 0;
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
-  // query = e.target.elements.searchQuery.value.trim();
-  query = e.target.elements['search-text'].value.trim();
-  if (!query) return;
+  
+query = e.target.elements['search-text'].value.trim();
+if (!query) {
+  iziToast.warning({
+    title: 'Warning',
+    message: 'Enter a query to search for images',
+    position: 'topRight',
+    timeout: 3000,
+  });
+  return;
+}
 
   clearGallery();
   hideLoadMoreButton();
@@ -59,6 +67,7 @@ form.addEventListener('submit', async e => {
 
 loadMoreBtn.addEventListener('click', async () => {
   page += 1;
+  hideLoadMoreButton();
   showLoader();
 
   try {
@@ -72,6 +81,8 @@ loadMoreBtn.addEventListener('click', async () => {
         message: "We're sorry, but you've reached the end of search results.",
         position: 'topRight',
       });
+    } else {
+      showLoadMoreButton();
     }
 
     scrollGallery();
